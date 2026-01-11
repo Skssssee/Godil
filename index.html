@@ -1,153 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>GoFile Player</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: #0f172a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    color: #fff;
-}
-
-.box {
-    width: 100%;
-    max-width: 520px;
-    background: #020617;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    text-align: center;
-}
-
-h2 {
-    margin-bottom: 15px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #2563eb;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #1d4ed8;
-}
-
-#result {
-    margin-top: 20px;
-    word-break: break-word;
-}
-
-video, audio {
-    width: 100%;
-    margin-top: 15px;
-    border-radius: 8px;
-}
-
-a {
-    color: #38bdf8;
-    text-decoration: none;
-    font-weight: bold;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>GoFile Folder Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background: black;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="box">
-    <h2>GoFile Player</h2>
-
-    <input
-        id="link"
-        value="https://gofile.io/d/DVBn14"
-        placeholder="Paste GoFile link"
-    >
-
-    <button onclick="loadFile()">Load & Play</button>
-
-    <div id="result"></div>
-</div>
-
-<script>
-async function loadFile() {
-    const result = document.getElementById("result");
-    const link = document.getElementById("link").value.trim();
-
-    result.innerHTML = "Loading...";
-
-    try {
-        if (!link.includes("/d/")) {
-            throw "Invalid GoFile link";
-        }
-
-        const id = link.split("/d/")[1];
-
-        const response = await fetch(`/api/gofile?id=${id}`);
-        const data = await response.json();
-
-        if (data.status !== "ok") {
-            throw JSON.stringify(data);
-        }
-
-        const files = Object.values(data.data.contents);
-        if (!files.length) {
-            throw "No files found";
-        }
-
-        const file = files[0];
-
-        result.innerHTML = `<h3>${file.name}</h3>`;
-
-        if (file.mimetype && file.mimetype.startsWith("video")) {
-            result.innerHTML += `
-                <video controls autoplay>
-                    <source src="${file.link}">
-                </video>
-            `;
-        } 
-        else if (file.mimetype && file.mimetype.startsWith("audio")) {
-            result.innerHTML += `
-                <audio controls autoplay>
-                    <source src="${file.link}">
-                </audio>
-            `;
-        } 
-        else {
-            result.innerHTML += `
-                <p>Preview not supported</p>
-                <a href="${file.link}" target="_blank">Download File</a>
-            `;
-        }
-
-    } catch (err) {
-        result.innerHTML = "❌ " + err;
-        console.error(err);
-    }
-}
-</script>
+<iframe
+  src="https://gofile.io/embed/DVBn14"
+  allowfullscreen>
+</iframe>
 
 </body>
 </html>
