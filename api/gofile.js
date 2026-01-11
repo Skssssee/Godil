@@ -10,44 +10,48 @@ export default async function handler(req, res) {
     "Accept": "application/json"
   };
 
-  try {
-    // GoFile OFFICIAL endpoint (folder-safe)
+  async function fetchFolder(contentId) {
     const apiUrl =
       `https://api.gofile.io/getContent` +
-      `?contentId=${id}` +
+      `?contentId=${contentId}` +
       `&websiteToken=public` +
       `&cache=true`;
 
     const r = await fetch(apiUrl, { headers });
     const text = await r.text();
 
-    if (!text.startsWith("{")) {
-      return res.status(500).json({
-        error: "Invalid GoFile response",
-        raw: text
-      });
-    }
+    if (!text.startsWith("{")) return [];
 
     const data = JSON.parse(text);
+    if (data.status !== "ok") return [];
 
-    if (data.status !== "ok") {
-      return res.status(404).json(data);
+    const items = Object.values(data.data.contents);
+    let files = [];
+
+    for (const item of items) {
+      if (item.type === "file") {
+        files.push(item);
+      }
+      if (item.type === "folder") {
+        const nested = await fetchFolder(item.id);
+        files = files.concat(nested);
+      }
     }
 
-    // ✅ FOLDER HANDLING
-    const contents = data.data.contents;
-    const items = Object.values(contents);
+    return files;
+  }
 
-    if (!items.length) {
-      return res.status(404).json({ error: "Folder is empty" });
+  try {
+    const allFiles = await fetchFolder(id);
+
+    if (!allFiles.length) {
+      return res.status(404).json({ error: "No files found in folder" });
     }
-
-    // pick first file (you can change this later)
-    const file = items.find(i => i.type === "file") || items[0];
 
     return res.status(200).json({
       status: "ok",
-      file
+      total: allFiles.length,
+      files: allFiles
     });
 
   } catch (err) {
@@ -56,4 +60,4 @@ export default async function handler(req, res) {
       details: err.toString()
     });
   }
-}
+        }
