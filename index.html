@@ -1,45 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>GoFile Multi Player</title>
+<title>GoFile Links</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   margin: 0;
   background: #0f172a;
-  color: #fff;
+  color: white;
   font-family: Arial, sans-serif;
 }
-
 .header {
-  padding: 10px;
-  background: #020617;
+  padding: 15px;
   display: flex;
   gap: 10px;
-  overflow-x: auto;
+  flex-wrap: wrap;
 }
-
 button {
   background: #2563eb;
   border: none;
+  padding: 12px 18px;
   color: white;
-  padding: 10px 16px;
   border-radius: 8px;
+  font-size: 16px;
   cursor: pointer;
-  white-space: nowrap;
 }
-
 button:hover {
   background: #1d4ed8;
 }
-
-iframe {
-  width: 100%;
-  height: calc(100vh - 60px);
-  border: none;
-  background: black;
+.note {
+  padding: 15px;
+  color: #cbd5f5;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -47,32 +41,19 @@ iframe {
 <body>
 
 <div class="header">
-  <button onclick="loadFolder('DVBn14')">Folder 1</button>
-  <button onclick="loadFolder('PASTE_ID_2')">Folder 2</button>
-  <button onclick="loadFolder('PASTE_ID_3')">Folder 3</button>
+  <button onclick="openGoFile('DVBn14')">Folder 1</button>
+  <button onclick="openGoFile('XXXXXX')">Folder 2</button>
+  <button onclick="openGoFile('YYYYYY')">Folder 3</button>
 </div>
 
-<iframe
-  id="player"
-  allow="autoplay; fullscreen"
-  allowfullscreen>
-</iframe>
+<div class="note">
+⚠ GoFile does NOT support embed or API anymore. Links open directly.
+</div>
 
 <script>
-function loadFolder(id) {
-  const iframe = document.getElementById("player");
-
-  // Force reload every time (important for mobile Chrome)
-  iframe.src = "";
-  setTimeout(() => {
-    iframe.src = "https://gofile.io/embed/" + id + "?autoplay=1";
-  }, 100);
+function openGoFile(id) {
+  window.open("https://gofile.io/d/" + id, "_blank");
 }
-
-// Auto-load first folder AFTER page load
-window.onload = () => {
-  loadFolder("DVBn14");
-};
 </script>
 
 </body>
