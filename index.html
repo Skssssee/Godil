@@ -25,8 +25,8 @@ button {
   background: #2563eb;
   border: none;
   color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -39,6 +39,7 @@ iframe {
   width: 100%;
   height: calc(100vh - 60px);
   border: none;
+  background: black;
 }
 </style>
 </head>
@@ -46,21 +47,32 @@ iframe {
 <body>
 
 <div class="header">
-  <button onclick="load('DVBn14')">Folder 1</button>
-  <button onclick="load('XXXXXX')">Folder 2</button>
-  <button onclick="load('YYYYYY')">Folder 3</button>
+  <button onclick="loadFolder('DVBn14')">Folder 1</button>
+  <button onclick="loadFolder('PASTE_ID_2')">Folder 2</button>
+  <button onclick="loadFolder('PASTE_ID_3')">Folder 3</button>
 </div>
 
-<iframe id="player" allowfullscreen></iframe>
+<iframe
+  id="player"
+  allow="autoplay; fullscreen"
+  allowfullscreen>
+</iframe>
 
 <script>
-function load(id) {
-  document.getElementById("player").src =
-    "https://gofile.io/embed/" + id;
+function loadFolder(id) {
+  const iframe = document.getElementById("player");
+
+  // Force reload every time (important for mobile Chrome)
+  iframe.src = "";
+  setTimeout(() => {
+    iframe.src = "https://gofile.io/embed/" + id + "?autoplay=1";
+  }, 100);
 }
 
-// auto-load first folder
-load("DVBn14");
+// Auto-load first folder AFTER page load
+window.onload = () => {
+  loadFolder("DVBn14");
+};
 </script>
 
 </body>
