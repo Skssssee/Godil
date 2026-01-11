@@ -1,27 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>GoFile Folder Player</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      background: black;
-    }
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>GoFile Multi Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  padding: 10px;
+  background: #020617;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+button {
+  background: #2563eb;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+iframe {
+  width: 100%;
+  height: calc(100vh - 60px);
+  border: none;
+}
+</style>
 </head>
+
 <body>
 
-<iframe
-  src="https://gofile.io/embed/DVBn14"
-  allowfullscreen>
-</iframe>
+<div class="header">
+  <button onclick="load('DVBn14')">Folder 1</button>
+  <button onclick="load('XXXXXX')">Folder 2</button>
+  <button onclick="load('YYYYYY')">Folder 3</button>
+</div>
+
+<iframe id="player" allowfullscreen></iframe>
+
+<script>
+function load(id) {
+  document.getElementById("player").src =
+    "https://gofile.io/embed/" + id;
+}
+
+// auto-load first folder
+load("DVBn14");
+</script>
 
 </body>
 </html>
